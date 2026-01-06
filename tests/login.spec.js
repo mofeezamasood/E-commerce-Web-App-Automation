@@ -4,7 +4,7 @@ const { test, expect } = require('@playwright/test');
 // Helper functions for test setup
 async function createTestUser(page, userData) {
     // Create a test user via registration form
-    await page.goto('/index.php?controller=authentication');
+    await page.goto('/index.php?controller=authentication&back=my-account');
     await page.fill('#email_create', userData.email);
     await page.click('#SubmitCreate');
     await page.waitForURL(/controller=authentication.*account-creation/);
@@ -266,11 +266,8 @@ test.describe('Login Functionality - Comprehensive Test Suite', () => {
         await context2.close();
     });
 
-    test('LOGIN-POS-011: Login with special characters in password', async ({ browser }) => {
+    test('LOGIN-POS-011: Login with special characters in password', async ({ page }) => {
         // Create a user with special characters in password
-        const context = await browser.newContext();
-        const page = await context.newPage();
-
         const timestamp = Date.now();
         const specialPassUser = {
             firstName: 'Special',
@@ -282,14 +279,12 @@ test.describe('Login Functionality - Comprehensive Test Suite', () => {
         await createTestUser(page, specialPassUser);
 
         // Login with special character password
-        await page.goto('/index.php?controller=authentication');
+        await page.goto('/index.php?controller=authentication&back=my-account');
         await page.fill('#email', specialPassUser.email);
         await page.fill('#passwd', specialPassUser.password);
         await page.click('#SubmitLogin');
 
         await expect(page.locator('.page-heading')).toHaveText('My account');
-
-        await context.close();
     });
 
     test('LOGIN-POS-012: Login timeout and auto-logout', async ({ page }) => {

@@ -1,0 +1,179 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e4]:
+    - link [ref=e8] [cursor=pointer]:
+      - /url: http://automationpractice.multiformis.com/
+    - generic [ref=e11]:
+      - navigation:
+        - link "Test User" [ref=e13] [cursor=pointer]:
+          - /url: http://automationpractice.multiformis.com/index.php?controller=my-account
+        - link "Sign out" [ref=e15] [cursor=pointer]:
+          - /url: http://automationpractice.multiformis.com/index.php?mylogout=
+        - link "Contact us" [ref=e17] [cursor=pointer]:
+          - /url: http://automationpractice.multiformis.com/index.php?controller=contact
+        - generic [ref=e18]:
+          - generic [ref=e19]: 
+          - text: "Call us now:"
+          - strong [ref=e20]: 0123-456-789
+    - generic [ref=e23]:
+      - link "My Store" [ref=e25] [cursor=pointer]:
+        - /url: http://automationpractice.multiformis.com/
+        - img "My Store" [ref=e26]
+      - generic [ref=e28]:
+        - textbox "Search" [ref=e29]
+        - button "" [ref=e30] [cursor=pointer]
+      - generic [ref=e32]:
+        - link " Cart (empty) " [ref=e33] [cursor=pointer]:
+          - /url: http://automationpractice.multiformis.com/index.php?controller=order
+        - text: 
+      - text:    
+      - list [ref=e35]:
+        - listitem [ref=e36]:
+          - link "Women" [ref=e37] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?id_category=3&controller=category
+          - text:     
+        - listitem [ref=e38]:
+          - link "Dresses" [ref=e39] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?id_category=8&controller=category
+        - listitem [ref=e40]:
+          - link "T-shirts" [ref=e41] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?id_category=5&controller=category
+  - generic [ref=e43]:
+    - generic [ref=e44]:
+      - link ".  ." [ref=e45] [cursor=pointer]:
+        - /url: http://automationpractice.multiformis.com/
+        - text: .
+        - generic [ref=e46]: 
+        - text: .
+      - generic [ref=e47]: ">"
+      - text: My account
+    - generic [ref=e49]:
+      - heading "My account" [level=1] [ref=e50]
+      - paragraph [ref=e51]: Welcome to your account. Here you can manage all of your personal information and orders.
+      - list [ref=e54]:
+        - listitem [ref=e55]:
+          - link " Add my first address" [ref=e56] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=address
+            - generic [ref=e57]: 
+            - generic [ref=e58]: Add my first address
+        - listitem [ref=e59]:
+          - link " Order history and details" [ref=e60] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=history
+            - generic [ref=e61]: 
+            - generic [ref=e62]: Order history and details
+        - listitem [ref=e63]:
+          - link " My credit slips" [ref=e64] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=order-slip
+            - generic [ref=e65]: 
+            - generic [ref=e66]: My credit slips
+        - listitem [ref=e67]:
+          - link " My addresses" [ref=e68] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=addresses
+            - generic [ref=e69]: 
+            - generic [ref=e70]: My addresses
+        - listitem [ref=e71]:
+          - link " My personal information" [ref=e72] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=identity
+            - generic [ref=e73]: 
+            - generic [ref=e74]: My personal information
+      - list [ref=e75]:
+        - listitem [ref=e76]:
+          - link " Home" [ref=e77] [cursor=pointer]:
+            - /url: http://automationpractice.multiformis.com/
+            - generic [ref=e78]:
+              - generic [ref=e79]: 
+              - text: Home
+  - contentinfo [ref=e81]:
+    - generic [ref=e82]:
+      - generic [ref=e83]:
+        - heading "Newsletter" [level=4] [ref=e84] [cursor=pointer]
+        - generic [ref=e87]:
+          - textbox [ref=e88]: Enter your e-mail
+          - button "" [ref=e89] [cursor=pointer]
+      - generic [ref=e90]:
+        - list [ref=e91]:
+          - listitem [ref=e92]:
+            - link "" [ref=e93] [cursor=pointer]:
+              - /url: http://www.facebook.com/prestashop
+          - listitem [ref=e94]:
+            - link "" [ref=e95] [cursor=pointer]:
+              - /url: http://www.twitter.com/prestashop
+          - listitem [ref=e96]:
+            - link "" [ref=e97] [cursor=pointer]:
+              - /url: http://www.prestashop.com/blog/en/
+          - listitem [ref=e98]:
+            - link "" [ref=e99] [cursor=pointer]:
+              - /url: https://www.google.com/+prestashop
+        - heading "Follow us" [level=4] [ref=e100] [cursor=pointer]
+      - generic [ref=e102]:
+        - heading "Categories" [level=4] [ref=e103] [cursor=pointer]
+        - list [ref=e106]:
+          - listitem [ref=e107]:
+            - link "Women" [ref=e108] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?id_category=3&controller=category
+      - generic [ref=e109]:
+        - heading "Information" [level=4] [ref=e110] [cursor=pointer]
+        - list [ref=e111]:
+          - listitem [ref=e112]:
+            - link "Specials" [ref=e113] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=prices-drop
+          - listitem [ref=e114]:
+            - link "New products" [ref=e115] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=new-products
+          - listitem [ref=e116]:
+            - link "Best sellers" [ref=e117] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=best-sales
+          - listitem [ref=e118]:
+            - link "Our stores" [ref=e119] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=stores
+          - listitem [ref=e120]:
+            - link "Contact us" [ref=e121] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=contact
+          - listitem [ref=e122]:
+            - link "Terms and conditions of use" [ref=e123] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?id_cms=3&controller=cms
+          - listitem [ref=e124]:
+            - link "About us" [ref=e125] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?id_cms=4&controller=cms
+          - listitem [ref=e126]:
+            - link "Sitemap" [ref=e127] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=sitemap
+      - link "© 2026 - Ecommerce software by PrestaShop™" [ref=e130] [cursor=pointer]:
+        - /url: http://www.prestashop.com
+      - generic [ref=e131]:
+        - heading "My account" [level=4] [ref=e132] [cursor=pointer]:
+          - link "My account" [ref=e133]:
+            - /url: http://automationpractice.multiformis.com/index.php?controller=my-account
+        - list [ref=e135]:
+          - listitem [ref=e136]:
+            - link "My orders" [ref=e137] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=history
+          - listitem [ref=e138]:
+            - link "My credit slips" [ref=e139] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=order-slip
+          - listitem [ref=e140]:
+            - link "My addresses" [ref=e141] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=addresses
+          - listitem [ref=e142]:
+            - link "My personal info" [ref=e143] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?controller=identity
+          - listitem [ref=e144]:
+            - link "Sign out" [ref=e145] [cursor=pointer]:
+              - /url: http://automationpractice.multiformis.com/index.php?mylogout
+      - generic [ref=e147]:
+        - heading "Store Information" [level=4] [ref=e148] [cursor=pointer]
+        - list [ref=e149]:
+          - listitem [ref=e150]:
+            - generic [ref=e151]: 
+            - text: My Company, 42 Puffin street 12345 Puffinville France
+          - listitem [ref=e152]:
+            - generic [ref=e153]: 
+            - text: "Call us now: 0123-456-789"
+          - listitem [ref=e154]:
+            - generic [ref=e155]: 
+            - text: "Email:"
+            - link "sales@yourcompany.com" [ref=e157] [cursor=pointer]:
+              - /url: mailto:%73%61%6c%65%73@%79%6f%75%72%63%6f%6d%70%61%6e%79.%63%6f%6d
+```
