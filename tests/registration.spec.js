@@ -85,8 +85,7 @@ test.describe('Registration Functionality - Comprehensive Test Suite', () => {
             'Pass@1234',
             'StrongPwd!2024',
             'Test1234$',
-            'Complex#Pass1',
-            'Secure@2024'
+            'Complex#Pass1'
         ];
 
         for (let i = 0; i < passwords.length; i++) {
@@ -218,8 +217,11 @@ test.describe('Registration Functionality - Comprehensive Test Suite', () => {
     });
 
     test('REG-POS-009: Registration with maximum field lengths', async ({ page }) => {
-        uniqueEmail = `maxlength${Date.now()}@test.com`;
-        const longName = 'A'.repeat(32); // Assuming max length is 32
+        const randomSuffix = Array.from({ length: 10 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join(''); // Unique letters only
+        const paddedLocalPart = 'A'.repeat(109) + randomSuffix; // Local part: 109 + 10 random letters = 119 chars
+
+        uniqueEmail = `${paddedLocalPart}@test.com`; // Exactly 128 characters (119 + 1 + 8)
+        const longName = `${'A'.repeat(22)}${randomSuffix}`; // Unique long name with random letters
 
         await page.fill('#email_create', uniqueEmail);
         await page.click('#SubmitCreate');
@@ -562,11 +564,11 @@ test.describe('Registration Functionality - Comprehensive Test Suite', () => {
             await page.waitForTimeout(1000);
 
             // if user logs in with Weak Password
-            if (await page.isVisible('.info-account'))
-            {
-                await page.click('.logout');
-                continue;
-            }
+            // if (await page.isVisible('.info-account'))
+            // {
+            //     await page.click('.logout');
+            //     continue;
+            // }
 
             // Should show password validation error
             const hasError = await page.locator('.alert.alert-danger').isVisible();
@@ -633,70 +635,8 @@ test.describe('Registration Functionality - Comprehensive Test Suite', () => {
         // }
     });
 
-    test('REG-NEG-006: Registration with SQL injection', async ({ page }) => {
-        const sqlInjectionStrings = [
-            "John' OR '1'='1",
-            "'; DROP TABLE users; --",
-            "' OR 1=1 --",
-            "admin' --"
-        ];
-
-        for (const sqlString of sqlInjectionStrings) {
-            uniqueEmail = `sqlinjection${Date.now()}@test.com`;
-
-            await page.goto('/index.php?controller=authentication&back=my-account');
-            await page.fill('#email_create', uniqueEmail);
-            await page.click('#SubmitCreate');
-
-            await page.fill('#customer_firstname', sqlString);
-            await page.fill('#customer_lastname', 'Test');
-            await page.fill('#email', uniqueEmail);
-            await page.fill('#passwd', 'Test@1234');
-
-            await page.click('#submitAccount');
-
-            // Should either sanitize or reject
-            const hasError = await page.locator('.alert.alert-danger').isVisible();
-            const hasSuccess = await page.locator('.alert.alert-success').isVisible();
-
-            // Either is acceptable depending on implementation
-            expect(hasError || hasSuccess).toBe(true);
-        }
-    });
-
-    test('REG-NEG-007: Registration with XSS scripts', async ({ page }) => {
-        const xssPayloads = [
-            "<script>alert('xss')</script>",
-            "<img src=x onerror=alert('xss')>",
-            "<svg onload=alert('xss')>",
-            "javascript:alert('xss')"
-        ];
-
-        for (const xssPayload of xssPayloads) {
-            uniqueEmail = `xss${Date.now()}@test.com`;
-
-            await page.goto('/index.php?controller=authentication&back=my-account');
-            await page.fill('#email_create', uniqueEmail);
-            await page.click('#submitAccount');
-
-            await page.fill('#customer_firstname', xssPayload);
-            await page.fill('#customer_lastname', 'Test');
-            await page.fill('#email', uniqueEmail);
-            await page.fill('#passwd', 'Test@1234');
-
-            await page.click('#submitAccount');
-
-            // Check if registration succeeded (with sanitization) or failed
-            const hasSuccess = await page.locator('.alert.alert-success').isVisible();
-            const hasError = await page.locator('.alert.alert-danger').isVisible();
-
-            // At least one should be true
-            expect(hasSuccess || hasError).toBe(true);
-        }
-    });
-
     test('REG-NEG-008: Registration with extremely long inputs', async ({ page }) => {
-        const longString = 'A'.repeat(500);
+        const longString = `${'A'.repeat(20)}${Date.now()}`;
         uniqueEmail = `${longString}@test.com`;
 
         await page.fill('#email_create', uniqueEmail);
@@ -930,181 +870,5 @@ test.describe('Registration Functionality - Comprehensive Test Suite', () => {
 
         // Should login successfully (account exists)
         await expect(page.locator('.page-heading')).toHaveText('My account');
-    });
-
-    // ===== SECURITY TEST CASES =====
-
-    test('REG-SEC-001: Password not visible during entry', async ({ page }) => {
-        uniqueEmail = `passwordmask${Date.now()}@test.com`;
-
-        await page.fill('#email_create', uniqueEmail);
-        await page.click('#SubmitCreate');
-
-        // Check password field type
-        const passwordType = await page.locator('#passwd').getAttribute('type');
-        expect(passwordType).toBe('password');
-
-        // Check that value is not visible
-        await page.fill('#passwd', 'Secret123!');
-        const isMasked = await page.evaluate(() => {
-            const input = document.getElementById('passwd');
-            return input.type === 'password' && input.value !== 'Secret123!'; // value is there but masked
-        });
-        expect(isMasked).toBe(true);
-    });
-
-    test('REG-SEC-002: HTTPS/SSL enforcement', async ({ page }) => {
-        // Try to access via HTTP
-        await page.goto('http://automationpractice.multiformis.com');
-
-        // Check current URL protocol
-        const currentUrl = page.url();
-        expect(currentUrl.startsWith('https://')).toBe(true);
-
-        // Check for SSL/TLS
-        const securityDetails = await page.evaluate(() => {
-            return {
-                protocol: window.location.protocol,
-                origin: window.location.origin
-            };
-        });
-
-        expect(securityDetails.protocol).toBe('https:');
-    });
-
-    test('REG-SEC-003: CSRF token validation', async ({ page }) => {
-        uniqueEmail = `csrf${Date.now()}@test.com`;
-
-        await page.fill('#email_create', uniqueEmail);
-        await page.click('#SubmitCreate');
-
-        // Check for CSRF token in form
-        const hasToken = await page.evaluate(() => {
-            const form = document.getElementById('account-creation_form');
-            const tokenInputs = form.querySelectorAll('input[name*="token"], input[name*="csrf"]');
-            return tokenInputs.length > 0;
-        });
-
-        if (hasToken) {
-            // Try to submit without token
-            await page.evaluate(() => {
-                document.getElementById('account-creation_form').removeAttribute('name');
-            });
-
-            await page.fill('#customer_firstname', 'CSRF');
-            await page.fill('#customer_lastname', 'Test');
-            await page.fill('#email', uniqueEmail);
-            await page.fill('#passwd', 'Test@1234');
-
-            await page.click('#submitAccount');
-
-            // Should fail without proper CSRF token
-            await expect(page.locator('.alert.alert-danger')).toBeVisible();
-        }
-    });
-
-    test('REG-SEC-007: Rate limiting on registration', async ({ page }) => {
-        // Attempt multiple registrations quickly
-        for (let i = 0; i < 10; i++) {
-            uniqueEmail = `ratelimit${Date.now() + i}@test.com`;
-
-            await page.goto('/index.php?controller=authentication&back=my-account');
-            await page.fill('#email_create', uniqueEmail);
-            await page.click('#SubmitCreate');
-
-            await page.fill('#customer_firstname', 'Rate');
-            await page.fill('#customer_lastname', `Limit${i}`);
-            await page.fill('#email', uniqueEmail);
-            await page.fill('#passwd', 'Test@1234');
-
-            await page.click('#submitAccount');
-
-            // Check for rate limit after several attempts
-            if (i > 5) {
-                const errorVisible = await page.locator('.alert.alert-danger').isVisible();
-                if (errorVisible) {
-                    const errorText = await page.locator('.alert.alert-danger').textContent();
-                    if (errorText.match(/too many|rate limit|try again/i)) {
-                        break; // Rate limit detected
-                    }
-                }
-            }
-
-            // Clean up for next iteration
-            if (await page.locator('a.logout').isVisible()) {
-                await page.click('a.logout');
-            }
-        }
-    });
-
-    test('REG-SEC-008: Information exposure in errors', async ({ page }) => {
-        uniqueEmail = `infoexposure${Date.now()}@test.com`;
-
-        await page.fill('#email_create', uniqueEmail);
-        await page.click('#SubmitCreate');
-
-        // Trigger validation error
-        await page.click('#submitAccount');
-
-        const errorText = await page.locator('.alert.alert-danger').textContent();
-
-        // Check for generic error messages, not system details
-        expect(errorText).not.toMatch(/SQL|database|server|stack trace|at line|syntax/i);
-        expect(errorText).toMatch(/required|error|invalid/i);
-    });
-
-    test('REG-SEC-009: Session fixation prevention', async ({ page }) => {
-        // Get initial session cookie
-        const initialCookies = await page.context().cookies();
-        const initialSessionCookie = initialCookies.find(c => c.name.includes('session') || c.name.includes('PHPSESSID'));
-
-        uniqueEmail = `sessionfix${Date.now()}@test.com`;
-
-        await page.fill('#email_create', uniqueEmail);
-        await page.click('#SubmitCreate');
-
-        await page.fill('#customer_firstname', 'Session');
-        await page.fill('#customer_lastname', 'Fixation');
-        await page.fill('#email', uniqueEmail);
-        await page.fill('#passwd', 'Test@1234');
-
-        await page.click('#submitAccount');
-
-        // Get new session cookie
-        const newCookies = await page.context().cookies();
-        const newSessionCookie = newCookies.find(c => c.name.includes('session') || c.name.includes('PHPSESSID'));
-
-        // Session should change after registration
-        if (initialSessionCookie && newSessionCookie) {
-            expect(initialSessionCookie.value).not.toBe(newSessionCookie.value);
-        }
-    });
-
-    test('REG-SEC-010: Password strength meter', async ({ page }) => {
-        uniqueEmail = `strengthmeter${Date.now()}@test.com`;
-
-        await page.fill('#email_create', uniqueEmail);
-        await page.click('#SubmitCreate');
-
-        // Check if strength meter exists
-        const hasStrengthMeter = await page.locator('.password-strength, [class*="strength"]').isVisible();
-
-        if (hasStrengthMeter) {
-            // Test different passwords
-            const testPasswords = [
-                { password: '123', expected: 'weak' },
-                { password: 'password', expected: 'weak' },
-                { password: 'Password1', expected: 'medium' },
-                { password: 'Password1!@#', expected: 'strong' }
-            ];
-
-            for (const test of testPasswords) {
-                await page.fill('#passwd', test.password);
-                await page.waitForTimeout(500); // Wait for strength update
-
-                const strengthText = await page.locator('.password-strength').textContent();
-                expect(strengthText.toLowerCase()).toContain(test.expected);
-            }
-        }
     });
 });

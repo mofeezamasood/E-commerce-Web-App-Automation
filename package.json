@@ -10,6 +10,7 @@
     "test:registration": "playwright test registration.spec.js",
     "test:login": "playwright test login.spec.js",
     "test:search": "playwright test product-search.spec.js",
+    "test:test": "playwright test test.spec.js"
 
 
   },
