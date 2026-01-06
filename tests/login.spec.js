@@ -559,16 +559,11 @@ test.describe('Login Functionality - Comprehensive Test Suite', () => {
         // Try to access via HTTP
         const httpUrl = page.url().replace('https://', 'http://');
 
-        try {
-            await page.goto(httpUrl);
-            const currentUrl = page.url();
+        await page.goto(httpUrl);
+        const currentUrl = page.url();
 
-            // Should redirect to HTTPS or show error
-            expect(currentUrl.startsWith('https://')).toBe(true);
-        } catch (error) {
-            // If HTTP is blocked, that's also acceptable
-            console.log('HTTP access blocked or redirected');
-        }
+        // Should redirect to HTTPS or show error
+        expect(currentUrl.startsWith('https://')).toBe(true);
     });
 
     test('LOGIN-NEG-015: Login with different password encoding', async ({ page }) => {
