@@ -7,7 +7,7 @@
       - /url: http://automationpractice.multiformis.com/
     - generic [ref=e11]:
       - navigation:
-        - link "Test User" [ref=e13] [cursor=pointer]:
+        - link "Referrercheck Auto" [ref=e13] [cursor=pointer]:
           - /url: http://automationpractice.multiformis.com/index.php?controller=my-account
         - link "Sign out" [ref=e15] [cursor=pointer]:
           - /url: http://automationpractice.multiformis.com/index.php?mylogout=
