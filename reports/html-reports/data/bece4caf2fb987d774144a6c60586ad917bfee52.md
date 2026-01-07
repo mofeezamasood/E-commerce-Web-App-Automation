@@ -20,7 +20,7 @@
         - /url: http://automationpractice.multiformis.com/
         - img "My Store" [ref=e24]
       - generic [ref=e26]:
-        - textbox "Search" [ref=e27]: Faded Short Sleeves T-shirt
+        - textbox "Search" [ref=e27]: dress
         - button "" [ref=e28] [cursor=pointer]
       - generic [ref=e30]:
         - link " Cart (empty) " [ref=e31] [cursor=pointer]:
@@ -212,9 +212,9 @@
                 - option "All suppliers" [selected]
                 - option "Fashion Supplier"
       - generic [ref=e176]:
-        - heading "Search \"Faded Short Sleeves T-shirt\" 4 results have been found." [level=1] [ref=e177]:
-          - text: Search "Faded Short Sleeves T-shirt"
-          - generic [ref=e178]: 4 results have been found.
+        - heading "Search \"dress\" 7 results have been found." [level=1] [ref=e177]:
+          - text: Search "dress"
+          - generic [ref=e178]: 7 results have been found.
         - generic [ref=e179]:
           - generic [ref=e180]:
             - list [ref=e181]:
@@ -233,10 +233,10 @@
               - generic:
                 - generic [ref=e190]: Sort by
                 - generic [ref=e191]:
-                  - generic [ref=e192] [cursor=pointer]: "--"
+                  - generic [ref=e192] [cursor=pointer]: "Price: Lowest first"
                   - combobox "Sort by" [ref=e193]:
-                    - option "--" [selected]
-                    - 'option "Price: Lowest first"'
+                    - option "--"
+                    - 'option "Price: Lowest first" [selected]'
                     - 'option "Price: Highest first"'
                     - 'option "Product Name: A to Z"'
                     - 'option "Product Name: Z to A"'
@@ -251,19 +251,19 @@
                   - strong: "0"
                   - text: )
                   - generic: 
-            - generic [ref=e196]: Showing 1 - 4 of 4 items
+            - generic [ref=e196]: Showing 1 - 7 of 7 items
         - list [ref=e197]:
           - listitem [ref=e198]:
             - generic [ref=e199]:
               - generic [ref=e201]:
                 - link "Faded Short Sleeves T-shirt" [ref=e202] [cursor=pointer]:
-                  - /url: http://automationpractice.multiformis.com/index.php?id_product=1&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=1&controller=product&search_query=dress&results=7
                   - img "Faded Short Sleeves T-shirt" [ref=e203]
                 - text: 
               - generic [ref=e204]:
                 - heading "Faded Short Sleeves T-shirt" [level=5] [ref=e205]:
                   - link "Faded Short Sleeves T-shirt" [ref=e206] [cursor=pointer]:
-                    - /url: http://automationpractice.multiformis.com/index.php?id_product=1&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=1&controller=product&search_query=dress&results=7
                 - generic [ref=e208]: $16.51
                 - list [ref=e210]:
                   - listitem [ref=e211]:
@@ -277,161 +277,233 @@
           - listitem [ref=e217]:
             - generic [ref=e218]:
               - generic [ref=e220]:
-                - link "Blouse" [ref=e221] [cursor=pointer]:
-                  - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                  - img "Blouse" [ref=e222]
+                - link "Printed Chiffon Dress" [ref=e221] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product&search_query=dress&results=7
+                  - img "Printed Chiffon Dress" [ref=e222]
                 - text: 
               - generic [ref=e223]:
-                - heading "Blouse" [level=5] [ref=e224]:
-                  - link "Blouse" [ref=e225] [cursor=pointer]:
-                    - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                - generic [ref=e227]: $27.00
-                - list [ref=e229]:
-                  - listitem [ref=e230]:
-                    - link [ref=e231] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product#/1-size-s/8-color-white
+                - heading "Printed Chiffon Dress" [level=5] [ref=e224]:
+                  - link "Printed Chiffon Dress" [ref=e225] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product&search_query=dress&results=7
+                - generic [ref=e226]:
+                  - generic [ref=e227]: $16.40
+                  - generic [ref=e228]: $20.50
+                  - generic [ref=e229]: "-20%"
+                - list [ref=e231]:
                   - listitem [ref=e232]:
                     - link [ref=e233] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product#/1-size-s/11-color-black
-                - generic [ref=e235]: Out of stock
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product#/1-size-s/15-color-green
+                  - listitem [ref=e234]:
+                    - link [ref=e235] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product#/1-size-s/16-color-yellow
+                - generic [ref=e237]: Out of stock
               - text: 
-          - listitem [ref=e236]:
-            - generic [ref=e237]:
-              - generic [ref=e239]:
-                - link "Printed Dress" [ref=e240] [cursor=pointer]:
-                  - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                  - img "Printed Dress" [ref=e241]
+          - listitem [ref=e238]:
+            - generic [ref=e239]:
+              - generic [ref=e241]:
+                - link "Printed Dress" [ref=e242] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=3&controller=product&search_query=dress&results=7
+                  - img "Printed Dress" [ref=e243]
                 - text: 
-              - generic [ref=e242]:
-                - heading "Printed Dress" [level=5] [ref=e243]:
-                  - link "Printed Dress" [ref=e244] [cursor=pointer]:
-                    - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                - generic [ref=e246]: $50.99
-                - list [ref=e248]:
-                  - listitem [ref=e249]:
-                    - link [ref=e250] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product#/1-size-s/7-color-beige
+              - generic [ref=e244]:
+                - heading "Printed Dress" [level=5] [ref=e245]:
+                  - link "Printed Dress" [ref=e246] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=3&controller=product&search_query=dress&results=7
+                - generic [ref=e248]: $26.00
+                - list [ref=e250]:
                   - listitem [ref=e251]:
                     - link [ref=e252] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product#/1-size-s/24-color-pink
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=3&controller=product#/1-size-s/13-color-orange
                 - generic [ref=e254]: Out of stock
               - text: 
           - listitem [ref=e255]:
             - generic [ref=e256]:
               - generic [ref=e258]:
-                - link "Printed Summer Dress" [ref=e259] [cursor=pointer]:
-                  - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                  - img "Printed Summer Dress" [ref=e260]
+                - link "Blouse" [ref=e259] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product&search_query=dress&results=7
+                  - img "Blouse" [ref=e260]
                 - text: 
               - generic [ref=e261]:
-                - heading "Printed Summer Dress" [level=5] [ref=e262]:
-                  - link "Printed Summer Dress" [ref=e263] [cursor=pointer]:
-                    - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product&search_query=Faded+Short+Sleeves+T-shirt&results=4
-                - generic [ref=e265]: $30.50
+                - heading "Blouse" [level=5] [ref=e262]:
+                  - link "Blouse" [ref=e263] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product&search_query=dress&results=7
+                - generic [ref=e265]: $27.00
                 - list [ref=e267]:
                   - listitem [ref=e268]:
                     - link [ref=e269] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product#/1-size-s/8-color-white
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product#/1-size-s/8-color-white
                   - listitem [ref=e270]:
                     - link [ref=e271] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product#/1-size-s/16-color-yellow
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=2&controller=product#/1-size-s/11-color-black
                 - generic [ref=e273]: Out of stock
               - text: 
-        - generic [ref=e275]:
-          - generic [ref=e276]:
+          - listitem [ref=e274]:
+            - generic [ref=e275]:
+              - generic [ref=e277]:
+                - link "Printed Summer Dress" [ref=e278] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product&search_query=dress&results=7
+                  - img "Printed Summer Dress" [ref=e279]
+                - text: 
+              - generic [ref=e280]:
+                - heading "Printed Summer Dress" [level=5] [ref=e281]:
+                  - link "Printed Summer Dress" [ref=e282] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product&search_query=dress&results=7
+                - generic [ref=e284]: $30.50
+                - list [ref=e286]:
+                  - listitem [ref=e287]:
+                    - link [ref=e288] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product#/1-size-s/8-color-white
+                  - listitem [ref=e289]:
+                    - link [ref=e290] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=6&controller=product#/1-size-s/16-color-yellow
+                - generic [ref=e292]: Out of stock
+              - text: 
+          - listitem [ref=e293]:
+            - generic [ref=e294]:
+              - generic [ref=e296]:
+                - link "Printed Summer Dress" [ref=e297] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product&search_query=dress&results=7
+                  - img "Printed Summer Dress" [ref=e298]
+                - text: 
+              - generic [ref=e299]:
+                - heading "Printed Summer Dress" [level=5] [ref=e300]:
+                  - link "Printed Summer Dress" [ref=e301] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product&search_query=dress&results=7
+                - generic [ref=e302]:
+                  - generic [ref=e303]: $28.98
+                  - generic [ref=e304]: $30.51
+                  - generic [ref=e305]: "-5%"
+                - list [ref=e307]:
+                  - listitem [ref=e308]:
+                    - link [ref=e309] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product#/1-size-s/11-color-black
+                  - listitem [ref=e310]:
+                    - link [ref=e311] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product#/1-size-s/13-color-orange
+                  - listitem [ref=e312]:
+                    - link [ref=e313] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product#/1-size-s/14-color-blue
+                  - listitem [ref=e314]:
+                    - link [ref=e315] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product#/1-size-s/16-color-yellow
+                - generic [ref=e317]: Product available with different options
+              - text: 
+          - listitem [ref=e318]:
+            - generic [ref=e319]:
+              - generic [ref=e321]:
+                - link "Printed Dress" [ref=e322] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product&search_query=dress&results=7
+                  - img "Printed Dress" [ref=e323]
+                - text: 
+              - generic [ref=e324]:
+                - heading "Printed Dress" [level=5] [ref=e325]:
+                  - link "Printed Dress" [ref=e326] [cursor=pointer]:
+                    - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product&search_query=dress&results=7
+                - generic [ref=e328]: $50.99
+                - list [ref=e330]:
+                  - listitem [ref=e331]:
+                    - link [ref=e332] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product#/1-size-s/7-color-beige
+                  - listitem [ref=e333]:
+                    - link [ref=e334] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=4&controller=product#/1-size-s/24-color-pink
+                - generic [ref=e336]: Out of stock
+              - text: 
+        - generic [ref=e338]:
+          - generic [ref=e339]:
             - button "Compare (0) " [disabled]:
               - generic:
                 - text: Compare (
                 - strong: "0"
                 - text: )
                 - generic: 
-          - generic [ref=e277]: Showing 1 - 4 of 4 items
-  - contentinfo [ref=e279]:
-    - generic [ref=e280]:
-      - generic [ref=e281]:
-        - heading "Newsletter" [level=4] [ref=e282] [cursor=pointer]
-        - generic [ref=e285]:
-          - textbox [ref=e286]: Enter your e-mail
-          - button "" [ref=e287] [cursor=pointer]
-      - generic [ref=e288]:
-        - list [ref=e289]:
-          - listitem [ref=e290]:
-            - link "" [ref=e291] [cursor=pointer]:
+          - generic [ref=e340]: Showing 1 - 7 of 7 items
+  - contentinfo [ref=e342]:
+    - generic [ref=e343]:
+      - generic [ref=e344]:
+        - heading "Newsletter" [level=4] [ref=e345] [cursor=pointer]
+        - generic [ref=e348]:
+          - textbox [ref=e349]: Enter your e-mail
+          - button "" [ref=e350] [cursor=pointer]
+      - generic [ref=e351]:
+        - list [ref=e352]:
+          - listitem [ref=e353]:
+            - link "" [ref=e354] [cursor=pointer]:
               - /url: http://www.facebook.com/prestashop
-          - listitem [ref=e292]:
-            - link "" [ref=e293] [cursor=pointer]:
+          - listitem [ref=e355]:
+            - link "" [ref=e356] [cursor=pointer]:
               - /url: http://www.twitter.com/prestashop
-          - listitem [ref=e294]:
-            - link "" [ref=e295] [cursor=pointer]:
+          - listitem [ref=e357]:
+            - link "" [ref=e358] [cursor=pointer]:
               - /url: http://www.prestashop.com/blog/en/
-          - listitem [ref=e296]:
-            - link "" [ref=e297] [cursor=pointer]:
+          - listitem [ref=e359]:
+            - link "" [ref=e360] [cursor=pointer]:
               - /url: https://www.google.com/+prestashop
-        - heading "Follow us" [level=4] [ref=e298] [cursor=pointer]
-      - generic [ref=e300]:
-        - heading "Categories" [level=4] [ref=e301] [cursor=pointer]
-        - list [ref=e304]:
-          - listitem [ref=e305]:
-            - link "Women" [ref=e306] [cursor=pointer]:
+        - heading "Follow us" [level=4] [ref=e361] [cursor=pointer]
+      - generic [ref=e363]:
+        - heading "Categories" [level=4] [ref=e364] [cursor=pointer]
+        - list [ref=e367]:
+          - listitem [ref=e368]:
+            - link "Women" [ref=e369] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?id_category=3&controller=category
-      - generic [ref=e307]:
-        - heading "Information" [level=4] [ref=e308] [cursor=pointer]
-        - list [ref=e309]:
-          - listitem [ref=e310]:
-            - link "Specials" [ref=e311] [cursor=pointer]:
+      - generic [ref=e370]:
+        - heading "Information" [level=4] [ref=e371] [cursor=pointer]
+        - list [ref=e372]:
+          - listitem [ref=e373]:
+            - link "Specials" [ref=e374] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=prices-drop
-          - listitem [ref=e312]:
-            - link "New products" [ref=e313] [cursor=pointer]:
+          - listitem [ref=e375]:
+            - link "New products" [ref=e376] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=new-products
-          - listitem [ref=e314]:
-            - link "Best sellers" [ref=e315] [cursor=pointer]:
+          - listitem [ref=e377]:
+            - link "Best sellers" [ref=e378] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=best-sales
-          - listitem [ref=e316]:
-            - link "Our stores" [ref=e317] [cursor=pointer]:
+          - listitem [ref=e379]:
+            - link "Our stores" [ref=e380] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=stores
-          - listitem [ref=e318]:
-            - link "Contact us" [ref=e319] [cursor=pointer]:
+          - listitem [ref=e381]:
+            - link "Contact us" [ref=e382] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=contact
-          - listitem [ref=e320]:
-            - link "Terms and conditions of use" [ref=e321] [cursor=pointer]:
+          - listitem [ref=e383]:
+            - link "Terms and conditions of use" [ref=e384] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?id_cms=3&controller=cms
-          - listitem [ref=e322]:
-            - link "About us" [ref=e323] [cursor=pointer]:
+          - listitem [ref=e385]:
+            - link "About us" [ref=e386] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?id_cms=4&controller=cms
-          - listitem [ref=e324]:
-            - link "Sitemap" [ref=e325] [cursor=pointer]:
+          - listitem [ref=e387]:
+            - link "Sitemap" [ref=e388] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=sitemap
-      - link "© 2026 - Ecommerce software by PrestaShop™" [ref=e328] [cursor=pointer]:
+      - link "© 2026 - Ecommerce software by PrestaShop™" [ref=e391] [cursor=pointer]:
         - /url: http://www.prestashop.com
-      - generic [ref=e329]:
-        - heading "My account" [level=4] [ref=e330] [cursor=pointer]:
-          - link "My account" [ref=e331]:
+      - generic [ref=e392]:
+        - heading "My account" [level=4] [ref=e393] [cursor=pointer]:
+          - link "My account" [ref=e394]:
             - /url: http://automationpractice.multiformis.com/index.php?controller=my-account
-        - list [ref=e333]:
-          - listitem [ref=e334]:
-            - link "My orders" [ref=e335] [cursor=pointer]:
+        - list [ref=e396]:
+          - listitem [ref=e397]:
+            - link "My orders" [ref=e398] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=history
-          - listitem [ref=e336]:
-            - link "My credit slips" [ref=e337] [cursor=pointer]:
+          - listitem [ref=e399]:
+            - link "My credit slips" [ref=e400] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=order-slip
-          - listitem [ref=e338]:
-            - link "My addresses" [ref=e339] [cursor=pointer]:
+          - listitem [ref=e401]:
+            - link "My addresses" [ref=e402] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=addresses
-          - listitem [ref=e340]:
-            - link "My personal info" [ref=e341] [cursor=pointer]:
+          - listitem [ref=e403]:
+            - link "My personal info" [ref=e404] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=identity
-      - generic [ref=e343]:
-        - heading "Store Information" [level=4] [ref=e344] [cursor=pointer]
-        - list [ref=e345]:
-          - listitem [ref=e346]:
-            - generic [ref=e347]: 
+      - generic [ref=e406]:
+        - heading "Store Information" [level=4] [ref=e407] [cursor=pointer]
+        - list [ref=e408]:
+          - listitem [ref=e409]:
+            - generic [ref=e410]: 
             - text: My Company, 42 Puffin street 12345 Puffinville France
-          - listitem [ref=e348]:
-            - generic [ref=e349]: 
+          - listitem [ref=e411]:
+            - generic [ref=e412]: 
             - text: "Call us now: 0123-456-789"
-          - listitem [ref=e350]:
-            - generic [ref=e351]: 
+          - listitem [ref=e413]:
+            - generic [ref=e414]: 
             - text: "Email:"
-            - link "sales@yourcompany.com" [ref=e353] [cursor=pointer]:
+            - link "sales@yourcompany.com" [ref=e416] [cursor=pointer]:
               - /url: mailto:%73%61%6c%65%73@%79%6f%75%72%63%6f%6d%70%61%6e%79.%63%6f%6d
 ```
