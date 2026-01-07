@@ -11,12 +11,11 @@
     "test:login": "playwright test login.spec.js",
     "test:search": "playwright test product-search.spec.js",
     "test:test": "playwright test test.spec.js"
-
-
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "playwright": "^1.57.0"
+    "playwright": "^1.57.0",
+    "prettier": "^3.7.4"
   },
   "main": "index.js",
   "directories": {
