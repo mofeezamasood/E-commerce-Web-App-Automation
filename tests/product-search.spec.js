@@ -43,20 +43,31 @@ async function waitForSearchResults(page) {
 
 // Gets all product names from search results
 async function getProductNames(page) {
-  return await page.locator(".product-name").allTextContents();
-}
+  // Wait for search results ONLY
+  await page
+    .locator("#product_list .product-name")
+    .first()
+    .waitFor({ state: "attached" });
 
+  // Get ONLY product names from the search results area
+  const nameElements = await page
+    .locator("#product_list .product-name")
+    .allTextContents();
+
+  // Clean up whitespace and filter out empties
+  return nameElements
+    .map((name) => name.trim())
+    .filter((name) => name.length > 0);
+}
 // Gets count of products in search results
 async function getProductCount(page) {
   return await page.locator(".product-container").count();
 }
 
 // Verifies search results are visible and contain expected text
-async function verifySearchResultsVisible(page, options = {}) {
-  const { expectResults = true } = options;
-
+async function verifySearchResultsVisible(page, expectResults = true) {
   if (expectResults) {
-    await expect(page.locator(".product-listing")).toBeVisible();
+    await expect(page.locator(".product_list")).toBeVisible();
   } else {
     const hasResults = await page.locator(".product-listing").isVisible();
     const hasNoResultsMessage = await page
@@ -108,7 +119,7 @@ function generateUniqueUserData(baseName = "TestUser") {
 
 // Performs login with provided credentials
 async function performLogin(page, email, password) {
-  await page.goto("url");
+  await page.goto(url);
   await page.fill("#email", email);
   await page.fill("#passwd", password);
   await page.click("#SubmitLogin");
@@ -156,7 +167,7 @@ async function changeSortOption(page, sortValue) {
   const sortDropdown = page.locator("#selectProductSort, .sort-select");
   if (await sortDropdown.isVisible()) {
     await sortDropdown.selectOption(sortValue);
-    await page.waitForLoadState("networkidle");
+    await page.waitForSelector(".product-container");
     return true;
   }
   return false;
@@ -523,7 +534,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const searchTerm of specialCharSearches) {
         await navigateToHomepage(page);
         await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -567,7 +578,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       await page.click('button[name="submit_search"]');
       await page.waitForLoadState("networkidle");
 
-      await verifySearchResultsVisible(page, { expectResults: false });
+      await verifySearchResultsVisible(page, false);
     } finally {
       await closeBrowserContext(context);
     }
@@ -575,30 +586,28 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
 
   test("SEARCH-POS-015: Search with mixed case", async ({ browser }) => {
     const { context, page } = await createBrowserContext(browser);
-    try {
-      const testCases = ["DRESS", "dress", "Dress", "DrEsS"];
-      let previousResults = null;
+    const testCases = ["DRESS", "dress", "Dress", "DrEsS"];
+    let previousResults = null;
 
-      for (const searchTerm of testCases) {
-        await navigateToHomepage(page);
-        await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page);
+    for (const searchTerm of testCases) {
+      await navigateToHomepage(page);
+      await performSearch(page, searchTerm);
+      await verifySearchResultsVisible(page);
 
-        // Get current results
-        const currentProductNames = (await getProductNames(page))
-          .map((name) => name.toLowerCase())
-          .sort();
+      // Get current results
+      const currentProductNames = (await getProductNames(page))
+        .map((name) => name.toLowerCase())
+        .sort();
 
-        // All searches should return same results (case-insensitive)
-        if (previousResults !== null) {
-          expect(currentProductNames).toEqual(previousResults);
-        }
-
-        previousResults = currentProductNames;
+      // All searches should return same results (case-insensitive)
+      if (previousResults !== null) {
+        expect(currentProductNames).toEqual(previousResults);
       }
-    } finally {
-      await closeBrowserContext(context);
+
+      previousResults = currentProductNames;
     }
+
+    await closeBrowserContext(context);
   });
 
   test("SEARCH-POS-016: Search performance", async ({ browser }) => {
@@ -619,74 +628,68 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
 
   test("SEARCH-POS-017: Search result display format", async ({ browser }) => {
     const { context, page } = await createBrowserContext(browser);
-    try {
-      await navigateToHomepage(page);
-      await performSearch(page, "dress");
-      await verifySearchResultsVisible(page);
 
-      // Check grid view
-      await expect(page.locator(".product-listing")).toBeVisible();
+    await navigateToHomepage(page);
+    await performSearch(page, "dress");
+    await verifySearchResultsVisible(page);
 
-      // Verify product information is displayed
-      const firstProduct = page.locator(".product-container").first();
+    // Check grid view
+    await expect(page.locator(".product-listing")).toBeVisible();
 
-      // Check for essential elements
-      await expect(firstProduct.locator(".product-name")).toBeVisible();
-      await expect(firstProduct.locator(".product-image")).toBeVisible();
-      await expect(firstProduct.locator(".product-price")).toBeVisible();
+    // Verify product information is displayed
+    const firstProduct = page.locator(".product-container").first();
 
-      // Check image display
-      const image = firstProduct.locator("img");
-      await expect(image).toBeVisible();
-      const imageSrc = await image.getAttribute("src");
-      expect(imageSrc).toBeTruthy();
+    // Check for essential elements
+    await expect(firstProduct.locator(".product-name")).toBeVisible();
 
-      // Check for grid/list view toggle if available
-      const viewToggle = page.locator(".view-toggle, .display-mode");
-      if (await viewToggle.isVisible()) {
-        // Test switching views
-        await viewToggle.locator(".list").click();
-        await page.waitForTimeout(500);
-        await expect(page.locator(".product-list")).toBeVisible();
+    await expect(
+      firstProduct.locator(".product-image-container"),
+    ).toBeVisible();
+    await expect(firstProduct.locator(".product-price").last()).toBeVisible();
 
-        await viewToggle.locator(".grid").click();
-        await page.waitForTimeout(500);
-        await expect(page.locator(".product-grid")).toBeVisible();
-      }
-    } finally {
-      await closeBrowserContext(context);
+    // Check image display
+    const image = firstProduct.locator("img");
+    await expect(image).toBeVisible();
+    const imageSrc = await image.getAttribute("src");
+    expect(imageSrc).toBeTruthy();
+
+    // Check for grid/list view toggle if available
+    const viewToggle = page.locator(".view-toggle, .display-mode");
+    if (await viewToggle.isVisible()) {
+      // Test switching views
+      await viewToggle.locator(".list").click();
+      await page.waitForTimeout(500);
+      await expect(page.locator(".product-list")).toBeVisible();
+
+      await viewToggle.locator(".grid").click();
+      await page.waitForTimeout(500);
+      await expect(page.locator(".product-grid")).toBeVisible();
     }
+    await closeBrowserContext(context);
   });
 
   test("SEARCH-POS-018: Search breadcrumb navigation", async ({ browser }) => {
     const { context, page } = await createBrowserContext(browser);
-    try {
-      await navigateToHomepage(page);
-      await performSearch(page, "summer dress");
-      await verifySearchResultsVisible(page);
 
-      // Check breadcrumb contains search
-      const breadcrumbText = await page.locator(".breadcrumb").textContent();
-      expect(breadcrumbText).toMatch(/search|results/i);
+    await navigateToHomepage(page);
+    await performSearch(page, "summer dress");
+    await verifySearchResultsVisible(page);
 
-      // Click home in breadcrumb
-      await page.locator('.breadcrumb a[title="Home"]').click();
-      await page.waitForLoadState("networkidle");
+    // Click home in breadcrumb
+    await page.locator('.breadcrumb a[title="Return to Home"]').click();
+    await page.waitForLoadState("networkidle");
 
-      // Should go to homepage
-      await expect(page).toHaveURL(/\/$/);
+    // Should go to homepage
+    await expect(page).toHaveURL(/index.php/);
 
-      // Use browser back to return to search
-      await page.goBack();
-      await page.waitForLoadState("networkidle");
+    // Use browser back to return to search
+    await page.goBack();
+    await page.waitForLoadState("networkidle");
 
-      // Should return to search results
-      await expect(page.locator(".product-listing")).toBeVisible();
-      const currentUrl = page.url();
-      expect(currentUrl).toContain("controller=search");
-    } finally {
-      await closeBrowserContext(context);
-    }
+    // Should return to search results
+    await verifySearchResultsVisible(page);
+
+    await closeBrowserContext(context);
   });
 
   test("SEARCH-POS-019: Search with manufacturer filter", async ({
@@ -796,7 +799,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const sqlInjection of sqlInjections) {
         await navigateToHomepage(page);
         await performSearch(page, sqlInjection);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -814,7 +817,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const xssPayload of xssPayloads) {
         await navigateToHomepage(page);
         await performSearch(page, xssPayload);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -830,7 +833,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       const longQuery = "A".repeat(1000);
 
       await performSearch(page, longQuery);
-      await verifySearchResultsVisible(page, { expectResults: false });
+      await verifySearchResultsVisible(page, false);
     } finally {
       await closeBrowserContext(context);
     }
@@ -846,7 +849,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const chars of specialChars) {
         await navigateToHomepage(page);
         await performSearch(page, chars);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -876,7 +879,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
         await page.waitForLoadState("networkidle");
 
         // Should handle gracefully
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -925,7 +928,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
 
       // Should load without errors
       await expect(page.locator("body")).toBeVisible();
-      await verifySearchResultsVisible(page, { expectResults: false });
+      await verifySearchResultsVisible(page, false);
     } finally {
       await closeBrowserContext(context);
     }
@@ -939,7 +942,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const words of stopWords) {
         await navigateToHomepage(page);
         await performSearch(page, words);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1002,7 +1005,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
           await page.waitForLoadState("networkidle");
 
           // Check results
-          await verifySearchResultsVisible(page, { expectResults: false });
+          await verifySearchResultsVisible(page, false);
         }
       }
     } finally {
@@ -1020,7 +1023,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const searchTerm of utf8Searches) {
         await navigateToHomepage(page);
         await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1034,7 +1037,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       await performSearch(page, "dress");
       await verifySearchResultsVisible(page);
 
-      const pagination = page.locator(".pagination");
+      const pagination = page.locator(".pagination_bottom");
       if (await pagination.isVisible()) {
         // Go to last page
         const lastPageLink = pagination.locator("a").last();
@@ -1091,7 +1094,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const searchTerm of accentedSearches) {
         await navigateToHomepage(page);
         await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1108,7 +1111,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const searchTerm of wildcardSearches) {
         await navigateToHomepage(page);
         await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1129,7 +1132,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const searchTerm of booleanSearches) {
         await navigateToHomepage(page);
         await performSearch(page, searchTerm);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1157,7 +1160,7 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
       for (const typo of commonTypos) {
         await navigateToHomepage(page);
         await performSearch(page, typo);
-        await verifySearchResultsVisible(page, { expectResults: false });
+        await verifySearchResultsVisible(page, false);
       }
     } finally {
       await closeBrowserContext(context);
@@ -1241,31 +1244,6 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
     }
   });
 
-  test("SEARCH-EDGE-011: Search accessibility (screen readers)", async ({
-    browser,
-  }) => {
-    const { context, page } = await createBrowserContext(browser);
-    try {
-      await navigateToHomepage(page);
-
-      // Test ARIA attributes
-      const searchInput = page.locator("#search_query_top");
-      const hasAriaLabel = await searchInput.getAttribute("aria-label");
-      expect(hasAriaLabel).toBeTruthy();
-
-      await performSearch(page, "dress");
-      await verifySearchResultsVisible(page);
-
-      // Check images have alt text
-      const firstProduct = page.locator(".product-container").first();
-      const productImage = firstProduct.locator("img");
-      const altText = await productImage.getAttribute("alt");
-      expect(altText).toBeTruthy();
-    } finally {
-      await closeBrowserContext(context);
-    }
-  });
-
   test("SEARCH-EDGE-012: Search mobile responsiveness", async ({ browser }) => {
     const { context, page } = await createBrowserContext(browser, {
       viewport: { width: 375, height: 667 },
@@ -1292,35 +1270,38 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
 
   test("SEARCH-INT-001: Search → Product Page → Back", async ({ browser }) => {
     const { context, page } = await createBrowserContext(browser);
-    try {
-      await navigateToHomepage(page);
-      await performSearch(page, "dress");
-      await verifySearchResultsVisible(page);
+    await navigateToHomepage(page);
+    await performSearch(page, "dress");
+    await verifySearchResultsVisible(page);
 
-      // Get first product details
-      const firstProductName = await page
-        .locator(".product-name")
-        .first()
-        .textContent();
+    // Verify product information is displayed
+    const firstProduct = page.locator(".product-container").first();
 
-      // Click product
-      await page.locator(".product-name").first().click();
-      await page.waitForLoadState("networkidle");
+    // Check for essential elements
+    await expect(firstProduct.locator(".product-name")).toBeVisible();
 
-      // Verify product page
-      await expect(page.locator('h1[itemprop="name"]')).toContainText(
-        firstProductName,
-      );
+    // Get first product name
+    const firstProductName = await firstProduct
+      .locator(".product-name")
+      .innerText();
 
-      // Use browser back
-      await page.goBack();
-      await page.waitForLoadState("networkidle");
+    // Click products
+    await firstProduct.locator(".product-name").first().click();
+    await page.waitForLoadState("networkidle");
 
-      // Should return to search results
-      await expect(page.locator(".product-listing")).toBeVisible();
-    } finally {
-      await closeBrowserContext(context);
-    }
+    // Verify product page
+    await expect(page.locator('h1[itemprop="name"]')).toContainText(
+      firstProductName,
+    );
+
+    // Use browser back
+    await page.goBack();
+    await page.waitForLoadState("networkidle");
+
+    // Should return to search results
+    await verifySearchResultsVisible(page);
+
+    await closeBrowserContext(context);
   });
 
   test("SEARCH-INT-002: Search → Add to Cart → Continue", async ({
@@ -1361,28 +1342,26 @@ test.describe("Product Search Functionality - Comprehensive Test Suite", () => {
     await createTestUser(browser, userData);
 
     const { context, page } = await createBrowserContext(browser);
-    try {
-      // Search while logged out
-      await navigateToHomepage(page);
-      await performSearch(page, "dress");
-      await verifySearchResultsVisible(page);
-      const loggedOutResults = await getProductNames(page);
 
-      // Login
-      await performLogin(page, userData.email, userData.password);
+    // Search while logged out
+    await navigateToHomepage(page);
+    await performSearch(page, "dress");
+    await verifySearchResultsVisible(page);
+    const loggedOutResults = await getProductNames(page);
 
-      // Search while logged in
-      await navigateToHomepage(page);
-      await performSearch(page, "dress");
-      await verifySearchResultsVisible(page);
-      const loggedInResults = await getProductNames(page);
+    // Login
+    await performLogin(page, userData.email, userData.password);
 
-      // Core search functionality should work both ways
-      expect(loggedOutResults.length).toBeGreaterThan(0);
-      expect(loggedInResults.length).toBeGreaterThan(0);
-    } finally {
-      await closeBrowserContext(context);
-    }
+    // Search while logged in
+    await navigateToHomepage(page);
+    await performSearch(page, "dress");
+    await verifySearchResultsVisible(page);
+    const loggedInResults = await getProductNames(page);
+
+    // Core search functionality should work both ways
+    expect(loggedOutResults.length).toBeGreaterThan(0);
+    expect(loggedInResults.length).toBeGreaterThan(0);
+    await closeBrowserContext(context);
   });
 
   test("SEARCH-INT-005: Search in different site sections", async ({

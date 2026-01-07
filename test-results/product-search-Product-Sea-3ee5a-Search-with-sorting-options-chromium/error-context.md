@@ -166,18 +166,18 @@
           - generic [ref=e138]:
             - list [ref=e139]:
               - listitem [ref=e140]:
-                - link "Printed Summer Dress" [ref=e141] [cursor=pointer]:
-                  - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product
-                  - img "Printed Summer Dress" [ref=e142]
+                - link "Printed Chiffon Dress" [ref=e141] [cursor=pointer]:
+                  - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product
+                  - img "Printed Chiffon Dress" [ref=e142]
                 - generic [ref=e143]:
-                  - heading "Printed Summer Dress" [level=5] [ref=e144]:
-                    - link "Printed Summer Dress" [ref=e145] [cursor=pointer]:
-                      - /url: http://automationpractice.multiformis.com/index.php?id_product=5&controller=product
-                  - paragraph [ref=e146]: Long printed dress with thin...
+                  - heading "Printed Chiffon Dress" [level=5] [ref=e144]:
+                    - link "Printed Chiffon Dress" [ref=e145] [cursor=pointer]:
+                      - /url: http://automationpractice.multiformis.com/index.php?id_product=7&controller=product
+                  - paragraph [ref=e146]: Printed chiffon knee length dress...
                   - generic [ref=e147]:
-                    - text: $28.98
-                    - generic [ref=e148]: "-5%"
-                    - text: $30.51
+                    - text: $16.40
+                    - generic [ref=e148]: "-20%"
+                    - text: $20.50
             - link "All specials " [ref=e150] [cursor=pointer]:
               - /url: http://automationpractice.multiformis.com/index.php?controller=prices-drop
               - generic [ref=e151]:
