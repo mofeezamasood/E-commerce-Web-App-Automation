@@ -20,7 +20,8 @@ function generateUserData(options = {}) {
   return {
     firstName: options.firstName || baseName,
     lastName: options.lastName || "User",
-    email: options.email || generateUniqueEmail(baseName.toLowerCase()),
+    email:
+      options.email || generateUniqueEmail(baseName.toLowerCase() + timestamp),
     password: options.password || "Test@1234",
     gender: options.gender || "male",
     dob: options.dob || null,
@@ -146,7 +147,7 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
   test("REG-POS-002: Registration with optional fields", async ({ page }) => {
     const userData = generateUserData({
       gender: "female",
-      firstName: "Jane",
+      firstName: `Jane`,
       lastName: "Smith",
     });
 
@@ -181,6 +182,7 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
       "Test1234$",
       "Complex#Pass1",
     ];
+    const context = await browser.newContext();
 
     for (let i = 0; i < passwords.length; i++) {
       const userData = generateUserData({
@@ -188,7 +190,6 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
         password: passwords[i],
       });
 
-      const context = await browser.newContext();
       const newPage = await context.newPage();
 
       await navigateToRegistrationPage(newPage);
@@ -198,8 +199,8 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
       await verifySuccessfulRegistration(newPage, userData);
 
       await logoutUser(newPage);
-      await context.close();
     }
+    await context.close();
   });
 
   test("REG-POS-005: Registration email case insensitivity", async ({
@@ -232,8 +233,8 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
     page,
   }) => {
     const userData = generateUserData({
-      firstName: "O'Brien",
-      lastName: "Smith-Jones",
+      firstName: "O'briöen",
+      lastName: "Smith-Jonüs",
     });
 
     await initiateRegistration(page, userData.email);
@@ -290,7 +291,7 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
     const paddedLocalPart = "a".repeat(109) + randomSuffix;
 
     const userData = generateUserData({
-      firstName: `${"a".repeat(22)}${randomSuffix}`,
+      firstName: `A${"a".repeat(21)}${randomSuffix}`,
       lastName: `${"a".repeat(22)}${randomSuffix}`,
       email: `${paddedLocalPart}@test.com`,
     });
@@ -470,7 +471,6 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
   });
 
   test("REG-NEG-003: Registration with password mismatch", async ({ page }) => {
-    // Note: This test assumes there's a confirm password field
     // Adjust based on actual form implementation
     const userData = generateUserData({
       baseName: "PasswordMismatch",
@@ -495,7 +495,7 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
 
     for (const weakPassword of weakPasswords) {
       const userData = generateUserData({
-        baseName: `WeakPass${Date.now()}`,
+        baseName: `WeakPass`,
         password: weakPassword,
       });
 
@@ -507,10 +507,7 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
       await fillRegistrationForm(newPage, userData);
       await submitRegistration(newPage);
 
-      const hasError = await newPage.locator(".alert-danger").isVisible();
-      if (hasError) {
-        await expect(newPage.locator(".alert-danger li")).toBeVisible();
-      }
+      await expect(newPage.getByText("passwd is invalid.")).toBeVisible();
 
       await context.close();
     }
@@ -528,12 +525,13 @@ test.describe("Registration Functionality - Comprehensive Test Suite", () => {
 
     for (const field of fields) {
       const userData = generateUserData({
-        baseName: `EmptyField${Date.now()}`,
+        baseName: `EmptyField`,
       });
 
       await navigateToRegistrationPage(page);
       await initiateRegistration(page, userData.email);
 
+      await page.fill("#email", "");
       // Fill all fields except the one being tested
       if (field.selector !== "#customer_firstname")
         await page.fill("#customer_firstname", userData.firstName);

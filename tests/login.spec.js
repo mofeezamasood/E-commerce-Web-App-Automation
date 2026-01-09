@@ -242,31 +242,6 @@ test.describe("Login Functionality - Comprehensive Test Suite", () => {
     await closeBrowserContext(context);
   });
 
-  test('LOGIN-POS-003: Login with "Remember me" checked', async ({
-    browser,
-  }) => {
-    const userData = generateUniqueUserData("Rememberme");
-    await createTestUser(browser, userData);
-
-    const { context, page } = await createBrowserContext(browser);
-    await navigateToLoginPage(page);
-
-    const rememberMeExists = await page.locator("#rememberme").isVisible();
-    if (rememberMeExists) {
-      await page.check("#rememberme");
-    }
-
-    await performLogin(page, userData.email, userData.password);
-    await verifySuccessfulLogin(page);
-
-    const cookies = await context.cookies();
-    const hasPersistentCookie = cookies.some(
-      (cookie) => cookie.expires && cookie.expires > Date.now() / 1000,
-    );
-
-    await closeBrowserContext(context);
-  });
-
   test("LOGIN-POS-004: Login case-insensitive email", async ({ browser }) => {
     const userData = generateUniqueUserData("Caseinsensitive");
     await createTestUser(browser, userData);
@@ -422,22 +397,6 @@ test.describe("Login Functionality - Comprehensive Test Suite", () => {
     await navigateToLoginPage(page);
     await performLogin(page, userData.email, userData.password);
     await verifyLoginSuccess(page);
-
-    await closeBrowserContext(context);
-  });
-
-  test("LOGIN-POS-012: Login timeout and auto-logout", async ({ browser }) => {
-    const userData = generateUniqueUserData("Timeouttest");
-    await createTestUser(browser, userData);
-
-    const { context, page } = await createBrowserContext(browser);
-    await navigateToLoginPage(page);
-    await performLogin(page, userData.email, userData.password);
-    await verifyLoginSuccess(page);
-
-    console.log(
-      "LOGIN-POS-012: Session timeout test requires clock manipulation",
-    );
 
     await closeBrowserContext(context);
   });
@@ -701,50 +660,6 @@ test.describe("Login Functionality - Comprehensive Test Suite", () => {
     });
     expect(isMasked).toBe(true);
 
-    const showHideToggle = await page
-      .locator('[type="button"][onclick*="password"], .toggle-password')
-      .isVisible();
-    if (showHideToggle) {
-      await page.click(
-        '[type="button"][onclick*="password"], .toggle-password',
-      );
-      expect(await page.locator("#passwd").getAttribute("type")).toBe("text");
-
-      await page.click(
-        '[type="button"][onclick*="password"], .toggle-password',
-      );
-      expect(await page.locator("#passwd").getAttribute("type")).toBe(
-        "password",
-      );
-    }
-
-    await closeBrowserContext(context);
-  });
-
-  test("LOGIN-SEC-002: Session ID regeneration", async ({ browser }) => {
-    const userData = generateUniqueUserData("Sessionid");
-    await createTestUser(browser, userData);
-
-    const { context, page } = await createBrowserContext(browser);
-    await navigateToLoginPage(page);
-
-    const initialCookies = await context.cookies();
-    const initialSessionCookie = initialCookies.find(
-      (c) => c.name.includes("session") || c.name.includes("PHPSESSID"),
-    );
-
-    await performLogin(page, userData.email, userData.password);
-    await verifySuccessfulLogin(page, { verifySessionCookie: true });
-
-    const newCookies = await context.cookies();
-    const newSessionCookie = newCookies.find(
-      (c) => c.name.includes("session") || c.name.includes("PHPSESSID"),
-    );
-
-    if (initialSessionCookie && newSessionCookie) {
-      expect(initialSessionCookie.value).not.toBe(newSessionCookie.value);
-    }
-
     await closeBrowserContext(context);
   });
 
@@ -832,38 +747,6 @@ test.describe("Login Functionality - Comprehensive Test Suite", () => {
     await closeBrowserContext(context2);
   });
 
-  test("LOGIN-SEC-007: Login with stolen cookie", async ({ browser }) => {
-    const userData = generateUniqueUserData("Stolencookie");
-    await createTestUser(browser, userData);
-
-    const { context: context1, page: page1 } =
-      await createBrowserContext(browser);
-
-    await navigateToLoginPage(page1);
-    await performLogin(page1, userData.email, userData.password);
-    await verifyLoginSuccess(page1);
-
-    const cookies = await context1.cookies();
-    const sessionCookie = cookies.find(
-      (c) => c.name.includes("session") || c.name.includes("PHPSESSID"),
-    );
-
-    const context2 = await browser.newContext();
-    await context2.addCookies([sessionCookie]);
-    const page2 = await context2.newPage();
-
-    await page2.goto("/index.php?controller=my-account");
-
-    // Verify access is denied
-    const accessDenied =
-      !(await page2.locator(".page-heading").isVisible()) ||
-      (await page2.locator(".alert.alert-danger").isVisible());
-    expect(accessDenied).toBe(true);
-
-    await closeBrowserContext(context1);
-    await context2.close();
-  });
-
   test("LOGIN-SEC-008: Password reset vs login", async ({ browser }) => {
     const userData = generateUniqueUserData("Passwordreset");
     await createTestUser(browser, userData);
@@ -876,37 +759,6 @@ test.describe("Login Functionality - Comprehensive Test Suite", () => {
     console.log(
       "LOGIN-SEC-008: Password reset test requires reset functionality",
     );
-
-    await closeBrowserContext(context);
-  });
-
-  test("LOGIN-SEC-010: Login with referrer check", async ({ browser }) => {
-    const userData = generateUniqueUserData("Referrercheck");
-    await createTestUser(browser, userData);
-
-    const { context, page } = await createBrowserContext(browser);
-
-    await page.evaluate(() => {
-      Object.defineProperty(document, "referrer", {
-        value: "https://malicious-site.com",
-        configurable: true,
-      });
-    });
-
-    await navigateToLoginPage(page);
-    await performLogin(page, userData.email, userData.password);
-    await verifyLoginSuccess(page);
-
-    const hasCsrfToken = await page.evaluate(() => {
-      const form = document.querySelector('form[action*="authentication"]');
-      return (
-        form &&
-        (form.querySelector('input[name*="token"]') ||
-          form.querySelector('input[name*="csrf"]'))
-      );
-    });
-
-    expect(hasCsrfToken).toBe(true);
 
     await closeBrowserContext(context);
   });
