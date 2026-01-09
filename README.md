@@ -1,7 +1,8 @@
 # E-Commerce Web Application - Test Automation Project
 
 ## Presentation
-[![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
+[![Watch the video](![Uploading Screenshot 2026-01-08 at 8.52.46 PM.png…]()
+)]([https://youtu.be/vt5fpE0bzSY](https://www.loom.com/share/58f118d89ca1470788c409899256588b))
 
 ## 📋 Project Overview
 
